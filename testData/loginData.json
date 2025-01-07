@@ -1,0 +1,20 @@
+{
+    "users": {
+      "validUser": {
+        "username": "johndoe19",
+        "password": "supersecret",
+        "expectedText":"johndoe19"
+      },
+      "invalidUser": {
+        "username": "carlos",
+        "password": "1234",
+        "expectedText":"Wrong credentials"
+      },
+      "emptyUser": {
+        "username": "",
+        "password": "",
+        "expectedText":"Fields can not be empty"
+      }
+    }
+  }
+  

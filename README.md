@@ -91,3 +91,69 @@
 	- Navigate to http://localhost:3100/search
 	- Leave search box empty and submit the search
 	- Assert that "Please provide a search word." message is shown.
+
+
+### Dependencies and initial steps
+We are gonna be needing:
+NodeJs, Git and Docker installed in our computers.
+
+Initial Steps:
+
+1 - Clonning git repo:
+git clone https://github.com/darionTest/darioSpasaroTest.git
+cd darioSpasaroTest
+
+2 - npm install
+npx playwright install #"Sometimes Playwright browsers are not installed automatically, so you can install them by running this command:"
+
+3 - Pulling docker image
+docker pull automaticbytes/demo-app`
+
+4 - Run the image
+docker run -p 3100:3100 automaticbytes/demo-app`
+Application will be available under http://localhost:3100
+
+
+### Running tests locally
+By default, Playwright tests run headless (without opening a browser window). This is set in the Playwright configuration. If you want to run the tests with visible browsers, you can modify the configuration, but for CI purposes, it is set to run headless by default.
+
+To run tests with Chromium or Mozilla (Firefox):
+We provide two scripts for running tests on Chromium or Mozilla (Firefox):
+
+Run tests using Chromium:
+npm run test:chrome
+
+Run tests using Mozilla (Firefox):
+npm run test:firefox
+
+Make sure you have the Playwright dependencies installed (npx playwright install), and the tests will automatically run in headless mode unless specified otherwise.
+
+After running the tests, Playwright generates a testing report. We can open it by:
+npx playwright show-report
+
+### Playwright Configuration
+The default Playwright configuration (playwright.config.ts) has been set to run the tests in headless mode. If you want to test with a visible browser, simply change the configuration to set the headless: false:
+
+// playwright.config.ts
+module.exports = {
+  use: {
+    headless: false, // Set to false to see the browser
+  },
+};
+
+### GitHub Actions Setup
+The tests are automated using GitHub Actions for Continuous Integration (CI). This will automatically run tests on every push or pull request to the main or master branch.
+
+To see the workflow configuration, check out the .github/workflows/e2e.yml file.
+
+How to manually trigger the tests:
+You can manually trigger the tests by going to the Actions tab in your GitHub repository and clicking on the "Run workflow" button.
+
+GitHub Actions workflow details:
+Installs Docker and pulls the Docker image of the app.
+Runs the Docker container and waits for the application to be ready.
+Executes Playwright tests.
+
+There is an artifact created as well with the testing report that will be linked to the workflow.
+As soon as the pipeline ends, by accesing the execution user is able to download the createad artifact 
+that is gonna be the report under .html format.

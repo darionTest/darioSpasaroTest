@@ -1,0 +1,15 @@
+{
+    "searchTests": [
+      {
+        "name": "Positive Case - Search",
+        "query": "test",
+        "expectedMessage": "Found one result for test"
+      },
+      {
+        "name": "Negative Case - Empty Search",
+        "query": "",
+        "expectedMessage": "Please provide a search word."
+      }
+    ]
+  }
+  

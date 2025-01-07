@@ -1,0 +1,8 @@
+{
+    "checkout": {
+      "userInfo": {
+        "fullName": "John Doe",
+        "email": "johndoe@example.com"
+      }
+    }
+  }
