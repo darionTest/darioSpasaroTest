@@ -21,15 +21,35 @@ jobs:
       with:
         node-version: lts/*
 
-    # Step 3: Install Node.js dependencies using npm ci
+    # Step 3: Cache Node.js dependencies to improve build performance
+    - name: Cache Node.js modules
+      id: node-cache
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    # Step 4: Install Node.js dependencies using npm ci
     - name: Install dependencies
       run: npm ci
 
-    # Step 4: Install Playwright browsers and their dependencies
+    # Step 5: Cache Playwright dependencies to speed up installation
+    - name: Cache Playwright Browsers
+      id: playwright-cache
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/ms-playwright
+        key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-playwright-
+
+    # Step 6: Install Playwright browsers and their dependencies
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
 
-    # Step 5: Install Docker on the runner machine
+    # Step 7: Install Docker on the runner machine
     - name: Set up Docker
       run: |
         sudo apt-get update
@@ -39,27 +59,27 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
-    # Step 6: Cache Docker image to improve build performance by reducing download time
+    # Step 8: Cache Docker image to improve build performance by reducing download time
     - name: Cache Docker image
       id: docker-cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: /tmp/.buildx-cache
         key: ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile') }}
         restore-keys: |
           ${{ runner.os }}-docker-
 
-    # Step 7: Pull the Docker image containing the web app
+    # Step 9: Pull the Docker image containing the web app
     - name: Pull Docker image
       run: |
         docker pull automaticbytes/demo-app
 
-    # Step 8: Run the Docker container on port 3100
+    # Step 10: Run the Docker container on port 3100
     - name: Run Docker container
       run: |
         docker run -d -p 3100:3100 automaticbytes/demo-app
 
-    # Step 9: Wait for the application to be ready (active check)
+    # Step 11: Wait for the application to be ready (active check)
     - name: Wait for the app to be ready
       run: |
         # Check that the server is responding on port 3100
@@ -69,11 +89,11 @@ jobs:
         done
         echo "The app is ready, continuing with the tests."
 
-    # Step 10: Run Playwright tests
+    # Step 12: Run Playwright tests
     - name: Run Playwright Tests
       run: npx playwright test
 
-    # Step 11: Upload Playwright test report as an artifact for later access
+    # Step 13: Upload Playwright test report as an artifact for later access
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
