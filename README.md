@@ -116,44 +116,58 @@ Application will be available under http://localhost:3100
 
 ### Running tests locally
 By default, Playwright tests run headless (without opening a browser window). This is set in the Playwright configuration. If you want to run the tests with visible browsers, you can modify the configuration, but for CI purposes, it is set to run headless by default.
+If you want to test with a visible browser, simply change the configuration to set the headless: false:
 
-To run tests with Chromium or Mozilla (Firefox):
-We provide two scripts for running tests on Chromium or Mozilla (Firefox):
-
-Run tests using Chromium:
-npm run test:chrome
-
-Run tests using Mozilla (Firefox):
-npm run test:firefox
-
-Make sure you have the Playwright dependencies installed (npx playwright install), and the tests will automatically run in headless mode unless specified otherwise.
-
-After running the tests, Playwright generates a testing report. We can open it by:
-npx playwright show-report
-
-### Playwright Configuration
-The default Playwright configuration (playwright.config.ts) has been set to run the tests in headless mode. If you want to test with a visible browser, simply change the configuration to set the headless: false:
-
+```sh
 // playwright.config.ts
 module.exports = {
   use: {
     headless: false, // Set to false to see the browser
   },
 };
+```
+
+To run tests with Chromium or Mozilla (Firefox):
+We provide two scripts for running tests on Chromium or Mozilla (Firefox):
+Run tests using Chromium:
+```sh
+npm run test:chromium
+```
+
+Run tests using Mozilla (Firefox):
+```sh
+npm run test:firefox
+```
+
+Make sure you have the Playwright dependencies installed.
+```sh
+npx playwright install
+```
+The tests will automatically run in headless mode unless specified otherwise.
+After running the tests, Playwright generates a testing report. 
+We can open it by:
+```sh
+npx playwright show-report
+```
 
 ### GitHub Actions Setup
 The tests are automated using GitHub Actions for Continuous Integration (CI). This will automatically run tests on every push or pull request to the main or master branch.
 
-To see the workflow configuration, check out the .github/workflows/PlaywrightTests.yml file.
+To see the workflow configuration, check out the 
+```sh
+.github/workflows/tests.yml file.
+```
 
 How to manually trigger the tests:
-You can manually trigger the tests by going to the Actions tab in your GitHub repository and clicking on the "Run workflow" button.
+You can manually trigger the tests by going to the Actions, selecting tests workflow and clicking on the "Run workflow" button.
 
 GitHub Actions workflow details:
 Installs Docker and pulls the Docker image of the app.
 Runs the Docker container and waits for the application to be ready.
 Executes Playwright tests.
+The pipeline also uses cache in order to spend less time on the up coming executions. All needed dependencies are gonna be stored
+and they are gonna be used as long as we keep using the same versions.
 
 There is an artifact created as well with the testing report that will be linked to the workflow.
-As soon as the pipeline ends, by accesing the execution user is able to download the createad artifact 
+As soon as the pipeline ends, by accesing the execution, user is able to download the createad artifact 
 that is gonna be the report under .html format.
