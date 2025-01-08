@@ -21,33 +21,28 @@ jobs:
       with:
         node-version: lts/*
 
-    # Step 3: Cache Node.js dependencies to improve build performance
-    - name: Cache Node.js modules
-      id: node-cache
-      uses: actions/cache@v3
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-
-    # Step 4: Install Node.js dependencies using npm ci
+    # Step 3: Install Node.js dependencies using npm ci
     - name: Install dependencies
       run: npm ci
 
-    # Step 5: Cache Playwright dependencies to speed up installation
-    - name: Cache Playwright Browsers
+    # Step 4: Install Playwright browsers and their dependencies
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+
+    # Step 5: Cache Playwright browsers
+    - name: Cache Playwright browsers
       id: playwright-cache
       uses: actions/cache@v3
       with:
         path: ~/.cache/ms-playwright
-        key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+        key: ${{ runner.os }}-playwright-${{ hashFiles('**/package.json') }}
         restore-keys: |
           ${{ runner.os }}-playwright-
 
-    # Step 6: Install Playwright browsers and their dependencies
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
+    # Step 6: Create Docker buildx cache directory if it doesn't exist
+    - name: Create Docker buildx cache directory
+      run: |
+        mkdir -p /tmp/.buildx-cache
 
     # Step 7: Install Docker on the runner machine
     - name: Set up Docker
@@ -68,6 +63,7 @@ jobs:
         key: ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile') }}
         restore-keys: |
           ${{ runner.os }}-docker-
+      continue-on-error: true # Esto permitirá que el workflow continúe incluso si no se encuentra el directorio
 
     # Step 9: Pull the Docker image containing the web app
     - name: Pull Docker image
