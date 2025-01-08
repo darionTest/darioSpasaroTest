@@ -100,17 +100,31 @@ NodeJs, Git and Docker installed in our computers.
 Initial Steps:
 
 1 - Clonning git repo:
+```sh
 git clone https://github.com/darionTest/darioSpasaroTest.git
 cd darioSpasaroTest
+```
 
-2 - npm install
-npx playwright install #"Sometimes Playwright browsers are not installed automatically, so you can install them by running this command:"
+2 - Installing all dependencies listed on package.json
+```sh
+npm install
+```
 
-3 - Pulling docker image
+3 - Playright dependencies
+```sh
+npx playwright install
+```
+#"Sometimes Playwright browsers are not installed automatically, so you can install them by running this command:"
+
+4 - Pulling docker image
+```sh
 docker pull automaticbytes/demo-app`
+```
 
-4 - Run the image
+5 - Run the image
+```sh
 docker run -p 3100:3100 automaticbytes/demo-app`
+```
 Application will be available under http://localhost:3100
 
 
@@ -139,11 +153,11 @@ Run tests using Mozilla (Firefox):
 npm run test:firefox
 ```
 
-Make sure you have the Playwright dependencies installed.
+Run tests by using both Mozilla/Chromium:
 ```sh
-npx playwright install
+npm run test
 ```
-The tests will automatically run in headless mode unless specified otherwise.
+
 After running the tests, Playwright generates a testing report. 
 We can open it by:
 ```sh
@@ -171,3 +185,10 @@ and they are gonna be used as long as we keep using the same versions.
 There is an artifact created as well with the testing report that will be linked to the workflow.
 As soon as the pipeline ends, by accesing the execution, user is able to download the createad artifact 
 that is gonna be the report under .html format.
+
+### Best Practices implemented
+Have worked with POM pattern.
+Have used a base page in order to efficiently apply inheritance.
+Have make use of allure report for getting results in html.
+Have commented and formated the code.
+Have impletemented a CI/CD solution that auto installs docker image, runs te tests and generate the report as an artifact.
