@@ -144,7 +144,7 @@ module.exports = {
 ### GitHub Actions Setup
 The tests are automated using GitHub Actions for Continuous Integration (CI). This will automatically run tests on every push or pull request to the main or master branch.
 
-To see the workflow configuration, check out the .github/workflows/e2e.yml file.
+To see the workflow configuration, check out the .github/workflows/PlaywrightTests.yml file.
 
 How to manually trigger the tests:
 You can manually trigger the tests by going to the Actions tab in your GitHub repository and clicking on the "Run workflow" button.
